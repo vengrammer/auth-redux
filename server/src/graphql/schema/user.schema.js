@@ -13,6 +13,7 @@ const userSchema = `#graphql
 
   type Query {
     me: User
+    allUsers: [User]
   }
 
   type Message {
@@ -20,9 +21,9 @@ const userSchema = `#graphql
   }
 
   type Mutation {
-    register(name: String!, username: String!, password: String!): AuthPayload
+    register(name: String!, username: String!, password: String!, role: String!): AuthPayload
     login(username: String!, password: String!): AuthPayload
-     logout: Message!
+   logout: Message!
   }
 `;
 

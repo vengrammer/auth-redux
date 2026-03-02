@@ -45,6 +45,7 @@ app.use(
       try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.id);
+        console.log("Context user:", user);
         return { user, token };
       } catch (err) {
         return {};

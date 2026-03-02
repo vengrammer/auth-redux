@@ -1,9 +1,9 @@
 import User from "../../model/User.js";
 import generateToken from "../../utils/generateToken.js";
 import bcrypt from "bcryptjs";
+import { withRole } from "../helpers/withRole.js";
 
-
-export const blacklist = new Set()
+export const blacklist = new Set();
 const userResolver = {
   Query: {
     me: async (_, __, context) => {
@@ -12,10 +12,14 @@ const userResolver = {
       }
       return context.user;
     },
+    allUsers: withRole(["admin"], async (_, __, context) => {
+      const users = await User.find();
+      return users;
+    }),
   },
 
   Mutation: {
-    register: async (_, { name, username, password }) => {
+    register: async (_, { name, username, password, role }) => {
       const userExists = await User.findOne({ username });
 
       if (userExists) {
@@ -27,6 +31,7 @@ const userResolver = {
       const user = await User.create({
         name,
         username,
+        role,
         password: hashedPassword,
       });
 
